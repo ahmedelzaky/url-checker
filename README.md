@@ -166,13 +166,13 @@ pnpm format    # Format code with Prettier
 
 ## Architecture
 
-The application is **fully client-side**:
-- All API calls to VirusTotal run directly from the browser
-- No backend server required
-- Uses Vite for development and production builds
-- TanStack Router for client-side routing
+The application uses a **standard React SPA** architecture with a small **serverless proxy**:
+- **Frontend**: Standard React/Vite app deployed to Vercel.
+- **Proxy**: A Vercel Serverless Function (`api/scan.ts`) handles communication with VirusTotal.
+- **CORS**: The proxy resolves the CORS issues that occur when calling VirusTotal directly from the browser.
+- **Security**: The VirusTotal API key is handled securely on the server side (Vercel).
 
-**Note**: The VirusTotal API key is exposed in the browser. For production, consider implementing a backend proxy to protect your API key.
+**Note**: Make sure to set `VITE_VIRUSTOTAL_API_KEY` in your Vercel Project Settings.
 
 ## Type Safety
 
