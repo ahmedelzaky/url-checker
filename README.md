@@ -67,7 +67,7 @@ pnpm build
 
 Outputs:
 
-- Client bundle: `dist/client/`
+- Client bundle: `dist/`
 
 ### Preview Production Build
 
