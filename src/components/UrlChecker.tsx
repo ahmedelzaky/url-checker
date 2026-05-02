@@ -152,6 +152,50 @@ export function UrlChecker() {
             </div>
           </Card>
 
+          {result.issues.length > 0 && (
+            <Card className="p-5">
+              <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                <AlertTriangle className="h-5 w-5 text-amber-500" />
+                Issues found ({result.issues.length})
+              </h2>
+              <ul className="space-y-3">
+                {result.issues.map((issue) => (
+                  <li
+                    key={issue.id}
+                    className={`rounded-lg border p-4 ${severityStyles[issue.severity]}`}
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div>
+                        <p className="font-medium text-foreground">{issue.title}</p>
+                        <p className="mt-1 text-sm text-muted-foreground">{issue.description}</p>
+                      </div>
+                      <span className="shrink-0 rounded-full border border-current/20 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide">
+                        {issue.severity}
+                      </span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
+
+          {result.passed.length > 0 && (
+            <Card className="p-5">
+              <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
+                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                Passed checks ({result.passed.length})
+              </h2>
+              <ul className="grid gap-2 sm:grid-cols-2">
+                {result.passed.map((p) => (
+                  <li key={p.id} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500" />
+                    {p.title}
+                  </li>
+                ))}
+              </ul>
+            </Card>
+          )}
+
           {(vtLoading || vt) && (
             <Card className="p-5">
               <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
@@ -203,55 +247,6 @@ export function UrlChecker() {
               )}
             </Card>
           )}
-
-          {result.issues.length > 0 && (
-            <Card className="p-5">
-              <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
-                <AlertTriangle className="h-5 w-5 text-amber-500" />
-                Issues found ({result.issues.length})
-              </h2>
-              <ul className="space-y-3">
-                {result.issues.map((issue) => (
-                  <li
-                    key={issue.id}
-                    className={`rounded-lg border p-4 ${severityStyles[issue.severity]}`}
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="font-medium text-foreground">{issue.title}</p>
-                        <p className="mt-1 text-sm text-muted-foreground">{issue.description}</p>
-                      </div>
-                      <span className="shrink-0 rounded-full border border-current/20 px-2 py-0.5 text-xs font-semibold uppercase tracking-wide">
-                        {issue.severity}
-                      </span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          )}
-
-          {result.passed.length > 0 && (
-            <Card className="p-5">
-              <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold">
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-                Passed checks ({result.passed.length})
-              </h2>
-              <ul className="grid gap-2 sm:grid-cols-2">
-                {result.passed.map((p) => (
-                  <li key={p.id} className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-500" />
-                    {p.title}
-                  </li>
-                ))}
-              </ul>
-            </Card>
-          )}
-
-          <p className="text-center text-xs text-muted-foreground">
-            This is a heuristic check based on URL structure only. It can't guarantee a site is safe
-            or malicious — always use your judgment.
-          </p>
         </div>
       )}
     </div>
