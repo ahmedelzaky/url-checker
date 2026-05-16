@@ -343,7 +343,7 @@ export function checkUrl(input: string): CheckResult {
       title: `Lookalike domain mimicking "${lookalikeBrand}"`,
       description: `The domain "${registrable}" closely resembles "${lookalikeBrand}" — a classic typosquatting / phishing tactic (e.g. swapping letters for digits like 0→o or 1→l).`,
       severity: "high",
-      points: 30,
+      points: 60,
     });
   } else {
     // 11b. Brand name only in subdomain (e.g. paypal.evil.com)
@@ -354,7 +354,7 @@ export function checkUrl(input: string): CheckResult {
         title: `Possible "${brandInSub}" impersonation`,
         description: `"${brandInSub}" appears in a subdomain but isn't the real domain — a frequent phishing tactic.`,
         severity: "high",
-        points: 20,
+        points: 40,
       });
     }
   }
