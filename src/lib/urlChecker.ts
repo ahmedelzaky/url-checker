@@ -90,12 +90,12 @@ const LOOKALIKE_MAP: Record<string, string> = {
   "4": "a",
   "5": "s",
   "7": "t",
-  $: "s",
+  "$": "s",
   "@": "a",
 };
 
 function normalizeLookalikes(s: string): string {
-  return s.replace(/[01345 7$@]/g, (c) => LOOKALIKE_MAP[c] ?? c);
+  return s.replace(/[013457$@]/g, (c) => LOOKALIKE_MAP[c] ?? c);
 }
 
 function levenshtein(a: string, b: string): number {
@@ -126,21 +126,18 @@ function detectLookalikeBrand(registrableDomain: string): string | null {
 
   for (const brand of BRAND_NAMES) {
     if (sld === brand) return null; // exact match — legitimate
-    // Normalize digit/symbol substitutions, then compare.
     const normalized = normalizeLookalikes(sld);
     if (normalized === brand) return brand;
     // Brand with extra chars appended/prepended (amazon1, paypal-secure, myamazon)
     if (sld.includes(brand) && sld !== brand) return brand;
-    // Close typo (1 edit away) for brands of meaningful length
-    if (
-      brand.length >= 5 &&
-      Math.abs(sld.length - brand.length) <= 1 &&
-      levenshtein(sld, brand) === 1
-    ) {
-      return brand;
-    }
-    // Normalized close typo (catches g00gle vs google after normalization edge cases)
-    if (brand.length >= 5 && levenshtein(normalized, brand) === 1) return brand;
+
+    // Compute distances and allow a slightly more tolerant threshold for long brand names.
+    const dist = levenshtein(sld, brand);
+    const normDist = levenshtein(normalized, brand);
+    const maxEdits = brand.length >= 7 ? 2 : 1; // allow up to 2 edits for long brands
+
+    if (dist <= maxEdits && Math.abs(sld.length - brand.length) <= maxEdits) return brand;
+    if (normDist <= maxEdits && Math.abs(normalized.length - brand.length) <= maxEdits) return brand;
   }
   return null;
 }
